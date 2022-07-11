@@ -1,0 +1,59 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+@model IEnumerable<BlogProject.Areas.Admin.Model.CategoryModel>
+
+
+
+
+@section Css
+{
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
+}
+
+@section Scripts
+{
+    <script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+                $('#myTable').DataTable();
+            });
+    </script>
+    <script>
+
+    </script>
+    
+}
+
+
+<div class="row">
+    <div class="col-md-12">
+        <button class="btn btn-warning shadowButton mb-3 text-white" style="background-color:black"><i class="fa-solid fa-plus mr-2" style="color:white"></i>Add Category</button>
+        <table id="myTable">
+            <thead style="background-color:black" class="text-white">
+                <tr>
+                    <td style="width:50px">Id</td>
+                    <td>Name</td>
+                    <td style="width:50px"></td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.Name</td>
+                        <td class="d-flex">
+                            <button class="btn btn-warning btn-sm float-right mr-2" style="background-color:orange"><i class="fa-solid fa-trash-can mr-2"></i>Delete</button>
+                            <button class="btn btn-secondary btn-sm float-right" style="background-color:gray"><i class="fa-solid fa-pen-to-square mr-2"></i>Edit</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

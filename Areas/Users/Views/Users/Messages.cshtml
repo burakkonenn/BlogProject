@@ -1,0 +1,471 @@
+﻿
+@{
+    ViewData["Title"] = "Messages";
+}
+
+<script src="//cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap5.min.css">
+
+<script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#myTable').DataTable({
+            language: {
+              
+            },
+            "oLanguage": { "sSearch": "" },
+            "language": {
+                "searchPlaceholder": "Ara",
+                "paginate": {
+                    "next": '<i class="fa fa-fw fa-long-arrow-right">',
+                    "previous": '<i class="fa fa-fw fa-long-arrow-left">',
+
+                }
+            }
+        });
+    });
+
+  
+
+
+    
+</script>
+@model BlogProject.Areas.Users.Model.ViewModel
+
+@Html.AntiForgeryToken()
+
+<div class="container">
+    <div id='main'>
+        <article>
+
+            <div class="row d-flex justify-content-center" style="margin:0">
+                <div class="col-md-12 incoming-message-column">
+                    <div class="messages-head d-flex justify-content-between align-items-center">
+                        <h2 class="messages-txt">Gelen Kutusu</h2>
+                        <div class="dropdown-fields">
+
+                            <div class="dropdown dropdown-section">
+                                <button class="btn btn-secondary dropdown-toggle dropdown-button" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
+                                    <img src="~/message-svgrepo-com (1).svg" class="message-icon-frst" />
+                                </button>
+                                <div class="dropdown-menu message-dropdown-menu p-0" aria-labelledby="dropdownMenuButton">
+                                    <div class="dropdown-message">
+                                        <a href="#" class="" data-toggle="modal" data-target="#exampleModalmessage">
+                                            <span class="dropdown-text">Yeni mesaj oluştur</span>
+                                        </a>
+                                    </div>
+                                    <div class="dropdown-message">
+                                        <a href="#" class="" data-toggle="modal" data-target="#SendMessageModal">
+                                            <span class="dropdown-text">Gönderilen mesajlar</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="dropdown dropdown-section">
+                                <button class="btn btn-secondary dropdown-toggle dropdown-button" type="button" id="dropdownMenuSettings" data-toggle="dropdown" aria-expanded="false">
+                                    <img src="~/settings-svgrepo-com (1).svg" class="settings-icon" />
+                                </button>
+                                <div class="dropdown-menu message-dropdown-menu p-0" aria-labelledby="dropdownMenuSettings">
+                                    <div class="dropdown-message">
+                                        <a asp-area="Users" asp-controller="Users" asp-action="EditProfile" asp-route-username="@Model.User.UserName">
+                                            <span class="dropdown-text">Hesap ayarları</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- exampleModalmessage -->
+
+                        <div class="modal fade" id="exampleModalmessage" tabindex="-1" aria-labelledby="exampleModalmessageFieldLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        <div class="row mt-3" style="margin:0">
+                                            <div class="col-md-12">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <h2 class="followed-message-head">Mesaj Gönder</h2>
+                                                    <button type="button" class="btn btn-secondary float-right btn-sm" data-dismiss="modal" style="border:none;background-color:white;color:black"><i class="fa-solid fa-xmark"></i></button>
+                                                </div>
+                                                <span class="followed-message-text">Takipleştiğin kişilere mesaj gönder</span>
+                                            </div>
+                                        </div>
+                                        <div class="row d-flex justify-content-center" style="margin:0">
+                                            <div class="col-md-12">
+                                                @foreach (var item in Model.FollowModel)
+                                                {
+                                                    <a asp-area="Users" asp-controller="Users" asp-action="MessageDetail" asp-route-username="@item.UserName" class="send-message-followed">
+                                                        <div class="incoming-message">
+                                                            <img src="~/@item.Avatar" class="user-avatar" />
+                                                        </div>
+                                                        <div class="message-followed-field">
+                                                            <span class="msg-first">@item.FirstName</span><br />
+                                                            <span class="msg-us">@item.UserName</span>
+                                                        </div>
+                                                    </a>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="displayMessageModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="">Gelen Mesaj</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="modal-btn-close" aria-hidden="true">&times;</span></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="modal-split card-field"></div>
+                                        <div class="modal-split">
+                                            <div class="card">
+                                                <form asp-area="Users" asp-controller="Users" asp-action="SendAnswer" method="POST">
+                                                    <div class="step-two-card"></div>
+                                                    <div class="message-group">
+                                                        <input asp-for="@Model.Subject" class="form-control rounded-0" placeholder="Konu" aria-describedby="">
+                                                        <span asp-validation-for="@Model.Subject" class="validation"></span>
+                                                    </div>
+                                                    <div class="message-group">
+                                                        <textarea asp-for="@Model.Message" class="form-control rounded-0" placeholder="Cevap gönder.." aria-describedby=""></textarea>
+                                                        <span asp-validation-for="@Model.Message" class="validation"></span>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row d-flex justify-content-center" style="margin:0">
+                <div class="col-md-12">
+
+                    @if (Model.MessagesForReceiver.Count() == 0)
+                    {
+                        <span>Henüz gelen herhangi bir mesajınız bulunmamaktadır.</span>
+                    }
+                    else
+                    {
+                        <table class="table table-borderless" id="myTable">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Gönderen</th>
+                                    <th scope="col">Tarih</th>
+                                    <th scope="col">Mesajı Görüntüle</th>
+                                    <th scope="col">Mesajı Sil</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.MessagesForReceiver)
+                                {
+                                    <tr>
+                                        <td class="sender-table-image">
+                                            <img src="~/@item.SenderAvatar" class="user-avatar mr-2" />
+                                            <span>@item.SenderFirstname</span>
+                                        </td>
+                                        <td>@item.MessageDate.ToString("dd-MMM-yyyy")</td>
+                                        <td class="ttt">
+                                            <button class="message-display-button" data-toggle="modal" data-target="#displayMessageModal" id="displayMessageModalId" data-id="@item.MessageId">Görüntüle</button>
+                                        </td>
+                                        <td class="ttt">
+                                            <button class="message-delete-button" data-toggle="modal" id="deleteMessageModal" data-id="@item.MessageId">Sil</button>
+                                        </td>
+                                    </tr>
+
+                                }
+                            </tbody>
+                        </table>
+
+                    }
+                </div>
+                <div class="d"></div>
+            </div>
+
+        </article>
+        <nav class="left-sidebar">
+            <div class="main-nav">
+                <ul>
+                    <li>
+                        <a href="/"> <img src="~/home-svgrepo-com (2).svg" /></a>
+                    </li>
+                    <li>
+                        <a asp-area="Users" asp-controller="Users" asp-action="Notifications"><img src="~/notification-svgrepo-com.svg" /></a>
+                    </li>
+                    <li>
+                        <a asp-area="Users" asp-controller="Users" asp-action="Messages"><img src="~/noun-message-1068492.svg" class="message-icon" /></a>
+                    </li>
+                    <li>
+                        <a asp-area="Users" asp-controller="Users" asp-action="Set"><img src="~/edit-svgrepo-com.svg" /></a>
+                    </li>
+                    <li>
+                        <a asp-area="Users" asp-controller="Users" asp-action="Home">
+                            <img src="~/user.png" class="icon-home" />
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="dropdown-login">
+                <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
+                    <div class="user-avatar-box-leftsidebar">
+                        <img src="~/@Model.User.Avatar" class="user-avatar-leftsidebar" />
+                    </div>
+                </button>
+                <div class="dropdown-menu logout-dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <div class="logout-user">
+                        <div class="user-avatar-box-leftsidebar">
+                            <img src="~/@Model.User.Avatar" class="user-avatar-leftsidebar" />
+                        </div>
+                        <a class="logout-username">@Model.User.UserName</a>
+                        <a href="#">hesabından çıkış yap</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+    </div>
+</div>
+
+
+
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@functions{
+    public string GetAntiXsrfRequestToken()
+    {
+        return Xsrf.GetAndStoreTokens(Context).RequestToken;
+    }
+}
+
+
+<script>
+    $('.message-sender-field').on('click', function (e) {
+        var passedID = $(this).data('id');
+
+        console.log(passedID);
+        $(".modal-body").val(passedID);
+    });
+</script>
+
+<script>
+    $(function () {
+
+        $(".container").on("click", ".message-sender-field", function () {
+            var id = $(this).data('id');
+
+            $.ajax({
+                url: "/users/users/GetToMessage/" +id,
+                dataType: 'json',
+                type: "GET",
+                headers: {"RequestVerificationToken": '@GetAntiXsrfRequestToken()'},
+                success: function (data) {
+                    let result = jQuery.parseJSON(data);
+                    var value = "";
+                    value += `<div class="card modal-message-detail">
+                                  <div class="card-body">
+                                    <p class="card-text modal-message-text">${result.MessageModel.Message}</p>
+                                    <a href="/users/users/messagedetail/${result.MessageModel.SenderFirstname}" class="btn btn-success btn-sm send-answer">Cevap Gönder</a>
+                                </div>`;
+                    $(".comment-card").html(value);
+                }
+            })
+        })
+
+
+    })
+</script>
+
+<script>
+    $(function () {
+        $(".container").on("click", "#LikeButton", function () {
+            var btn = $(this)
+            var id = btn.data("id")
+
+            let data = {
+                ReceiverId: $(".hiddenUserId").val()
+            };
+
+            $.ajax({
+                type: "GET",
+                data: data,
+                url: "/Users/Users/like/" + id,
+                success: function (data) {
+
+                    $("#span").text(data);
+                    console.log(data);
+                    //$("#span").html(data);
+                    btn.attr('id', 'UnLike')
+                }
+            })
+        })
+    })
+</script>
+
+
+<script type="text/javascript">
+    $(function () {
+        $(".container").on("click", "#deleteMessageModal", function () {
+            var btn = $(this)
+            var id = btn.data("id");
+
+                bootbox.confirm({
+                message: 'Silmek istediğinize emin misiniz?',
+                closeButton: false,
+                buttons: {
+                    'cancel': {
+                        label: 'Hayır',
+                        className: 'btn-default pull-left'
+                    },
+                    'confirm': {
+                        label: 'Evet',
+                        className: 'btn-danger pull-right'
+                    }
+                },
+                callback: function (result) {
+                    if (result) {
+                        $.ajax({
+                                type: "GET",
+                                headers:{"RequestVerificationToken": '@GetAntiXsrfRequestToken()'},
+                                url: "/Users/Users/DeleteMessage/" + id,
+                                success: function (data) {
+                                    btn.parent().parent().remove();
+
+                                }
+                        })
+                    }
+                }
+            });
+
+        })
+    })
+</script>
+
+<script type="text/javascript">
+    $(function () {
+        $(".container").on("click", "#displayMessageModalId", function () {
+            var btn = $(this)
+            var id = btn.data("id");
+
+            $.ajax({
+                type: "GET",
+                headers: { "RequestVerificationToken": '@GetAntiXsrfRequestToken()' },
+                dataType: "json",
+                url: "/Users/Users/GetToMessageById/" + id,
+                success: function (data) {
+                    var parseData = JSON.parse(data);
+                    var value = "";
+                    value += `<div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <h5 class="modal-sender-firstname">Gönderen: ${parseData.SenderFirstName}</h5>
+                                    </div>
+                                    <h6 class="card-subtitle mb-2 text-muted modal-sender-date">Tarih: ${parseData.Date}</h6>
+                                    <p class="card-text modal-sender-message">${parseData.SenderMessage}</p>
+                                </div>
+                            </div>   `;
+                    $(".card-field").html(value);
+
+
+                    var card = "";
+                    card += `<h5 class="modal-sender-firstname">Alıcı: ${parseData.SenderFirstName}</h5`;
+                    $(".step-two-card").html(card);
+                }
+            })
+        })
+    })
+</script>
+
+
+<script>
+    $(document).ready(function () {
+        prep_modal();
+    });
+
+    function prep_modal() {
+        $(".modal").each(function () {
+
+            var element = this;
+            var pages = $(this).find('.modal-split');
+
+            if (pages.length != 0) {
+                pages.hide();
+                pages.eq(0).show();
+
+                var b_button = document.createElement("button");
+                b_button.setAttribute("type", "button");
+                b_button.setAttribute("class", "modal-back-button");
+                b_button.setAttribute("style", "display: none;");
+                b_button.innerHTML = "Geri";
+
+                var n_button = document.createElement("button");
+                n_button.setAttribute("type", "button");
+                n_button.setAttribute("class", "modal-send-answer-button");
+                n_button.innerHTML = "Cevap Gönder";
+
+                $(this).find('.modal-footer').append(b_button).append(n_button);
+
+
+                var page_track = 0;
+
+                $(n_button).click(function () {
+
+                    this.blur();
+
+                    if (page_track == 0) {
+                        $(b_button).show();
+                    }
+
+                    if (page_track == pages.length - 2) {
+                        $(n_button).text("Gönder");
+
+                    }
+
+                    if (page_track == pages.length - 1) {
+                        $(element).find("form").submit();
+                    }
+
+                    if (page_track < pages.length - 1) {
+                        page_track++;
+
+                        pages.hide();
+                        pages.eq(page_track).show();
+                    }
+
+
+                });
+
+                $(b_button).click(function () {
+
+                    if (page_track == 1) {
+                        $(b_button).hide();
+                    }
+
+                    if (page_track == pages.length - 1) {
+                        $(n_button).text("Cevap gönder");
+                    }
+
+                    if (page_track > 0) {
+                        page_track--;
+
+                        pages.hide();
+                        pages.eq(page_track).show();
+                    }
+
+
+                });
+
+            }
+
+        });
+    }
+</script>

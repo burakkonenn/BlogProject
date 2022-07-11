@@ -1,0 +1,134 @@
+﻿
+@model BlogProject.Areas.Users.Model.ViewModel
+
+
+@Html.AntiForgeryToken()
+
+
+<div class="container">
+    <div id='main'>
+        <article>
+            <div class="row d-flex justify-content-center notification-header-row">
+                <div class="col-md-10 d-flex justify-content-between">
+                    <div class="messages-head">
+                        <h2 class="ml-2">Bildirimler</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin:0">
+                <div class="col-md-10">
+                    @foreach (var item in Model.Notif)
+                    {
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                @*<a href="#" class="d-flex">
+                                    <img src="~/@item.Actor.Avatar" class="actor-user" />
+                                    <span class="mr-1 ml-1">@item.Actor.FirstName</span>
+                                    <span class="mr-1">@item.Actor.LastName</span>
+                                    <span class="mr-1">@item.Blog.Title</span>
+                                    <span>@item.Entity_Type.Notification_Desc</span>
+
+                                </a>*@
+                            </li>
+                            <li class="list-group-item">
+                                <a href="#" class="d-flex">
+                                    <img src="~/@item.Follow.Follower.Avatar" class="actor-user" />
+                                    @*<span class="mr-1 ml-1">@item.follow.follower.firstname</span>
+                                    <span class="mr-1 ml-1">@item.follow.follower.lastname</span>
+                                    <span>@item.Entity_Type.Notification_Desc</span>*@
+                                </a>
+                            </li>
+                        </ul>
+                    }
+                </div>
+            </div>
+
+        </article>
+
+        <nav class="left-sidebar">
+            <div class="main-nav">
+                <ul>
+                    <li>
+                        <a href="/"> <img src="~/home-svgrepo-com (2).svg" /></a>
+                    </li>
+                    <li>
+                        <a asp-area="Users" asp-controller="Users" asp-action="Notifications"><img src="~/notification-svgrepo-com.svg" /></a>
+                    </li>
+                    <li>
+                        <a asp-area="Users" asp-controller="Users" asp-action="Messages"><img src="~/noun-message-1068492.svg" class="message-icon" /></a>
+                    </li>
+                    <li>
+                        <a asp-area="Users" asp-controller="Users" asp-action="Set"><img src="~/edit-svgrepo-com.svg" /></a>
+                    </li>
+                    <li>
+                        <a asp-area="Users" asp-controller="Users" asp-action="Home">
+                            <img src="~/user.png" class="icon-home" />
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="dropdown-login">
+                <button class="dropdown-toggle dropdown-btn" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
+                    <div class="user-avatar-box-leftsidebar">
+                        <img src="~/@Model.User.Avatar" class="user-avatar-leftsidebar" />
+                    </div>
+                </button>
+                <div class="dropdown-menu logout-dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <div class="logout-user">
+                        <div class="user-avatar-box-leftsidebar">
+                            <img src="~/@Model.User.Avatar" class="user-avatar-leftsidebar" />
+                        </div>
+                        <a class="logout-username">@Model.User.UserName</a>
+                        <a href="#">hesabından çıkış yap</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <aside>
+            <div class="row suggested-topics">
+                <h2 class="suggested-topics-text">Önerilen konular</h2>
+                <div class="col-md-12 d-flex flex-wrap">
+                    @foreach (var item in Model.Category)
+                    {
+                        <a class="btn btn-dar flex-wrap tag-button">@item.Name</a>
+                    }
+                </div>
+            </div>
+
+            <div class="row follow-row">
+                <h2 class="follow-text text-center">Takip Edebileceğin Kişiler</h2>
+                <div class="col-md-12 ">
+                    <div class="d-flex flex-column follow-col">
+                        @foreach (var item in Model.Users)
+                        {
+                            <div class="d-flex FollowGroup">
+                                <div class="user-avatar-box">
+                                    <img src="~/@item.AvatarUrl" class="user-avatar" />
+                                </div>
+                                <div class="firstname-username">
+                                    <a class="Follow">
+                                        <h3 class="firstname">@item.FirstName</h3>
+                                    </a>
+                                    <h5 class="Follow-username">
+                                        @if (item.PersonelInfo.Length > 50)
+                                        {
+                                            @item.PersonelInfo.Substring(50)
+                                        }
+                                        else
+                                        {
+                                            @item.PersonelInfo
+                                        }
+                                    </h5>
+                                </div>
+                                <button id="follow" data-id="@item.Id" class="btn btn-dark FollowButton">Takip et</button>
+
+                            </div>
+
+                        }
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+</div>
+

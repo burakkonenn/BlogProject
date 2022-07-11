@@ -1,0 +1,353 @@
+﻿
+@model BlogProject.Areas.Users.Model.ViewModel
+
+
+
+
+@Html.AntiForgeryToken()
+
+<div class="container">
+    <div id='main'>
+        <article>
+            <div class="row profile-row" style="margin:0">
+                <div class="col-md-12 profile-col">
+                    <div class="profile-image-edit-groups">
+                        <div class="home-avatar-box">
+                            <img src="~/@Model.User.Avatar" class="home-avatar" />
+                        </div>
+                        <div class="profile-inf">
+                            <span class="follow-firstname">@Model.User.FirstName</span>
+                            <span class="follow-lastname">@Model.User.LastName</span>
+                            <h5>@Model.User.Personelİnfo</h5>
+                            <h5>@Model.User.WebSite</h5>
+                            <h5>@Model.User.Location</h5>
+                        </div>
+
+                    </div>
+                    <div class="profile-follow-info">
+                        <a class="followCount" href="#">Takip edilen: @Model.FollowedCount</a>
+                        <a class="followerCount" href="#">Takipçi: @Model.FollowerCount</a>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row d-flex justify-content-center">
+                <div class="col-md-10">
+                    <div id="tsum-tabs">
+                        <input id="tab1" type="radio" name="tabs" checked>
+                        <label for="tab1">Bloglar</label>
+
+                        <input id="tab2" type="radio" name="tabs">
+                        <label for="tab2">Takip edilenler</label>
+
+                        <input id="tab3" type="radio" name="tabs">
+                        <label for="tab3">Takipçiler</label>
+
+                        <input id="tab4" type="radio" name="tabs">
+                        <label for="tab4">Beğeniler</label>
+
+                        <section id="content1">
+                            <div class="row d-flex justify-content-center" style="margin:0">
+
+                                @if (Model.UsersBlog.Count() == 0)
+                                {
+                                    <div class="fl-box">
+                                        <h4 class="fl1">Henüz yayınlamış olduğunuz bir içerik bulunmamaktadır</h4>
+                                    </div>
+                                }
+                                else
+                                {
+                                    @foreach (var item in Model.UsersBlog)
+                                    {
+
+                                        <div class="col-md-11 list-column">
+                                            <div class="row" style="margin:0">
+                                                <div class="card blog-card">
+                                                    <div class="row g-0" style="margin:0">
+                                                        <a href="#" class="blog-anch">
+                                                            <div class="col-md-4 blog-image-col">
+                                                                <img src="~/@item.BlogImage" class="blog-images rounded-0">
+                                                            </div>
+                                                            <div class="col-md-8 p-0">
+                                                                <div class="card-body blog-card-body">
+                                                                    <h5 class="card-title blog-card-title">@(item.BlogTitle.Length > 37 ? item.BlogTitle.Substring(0, 37) + "..." : item.BlogTitle)</h5>
+                                                                    <span class="card-text ">@Html.Raw(item.BlogContent.Length > 367 ? item.BlogContent.Substring(0, 367) + "..." : item.BlogContent)</span>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                    <div class="row user-blog-detail mt-2" style="margin:0">
+                                                        <div class="col-md-6 d-flex align-items-center p-0">
+                                                            <a href="#" class="action-usr">
+                                                                <div class="in-group-usr">
+                                                                    <div class="in-usr-image">
+                                                                        <img src="~/@item.BlogUserAvatar" class="user-image float-left" />
+                                                                    </div>
+                                                                    <div class="usr-inf">
+                                                                        <span class="blog-user-info">@item.BlogUserFirstName</span>
+                                                                        <span class="blog-user-info-lastname">@item.BlogUserLastName</span><br />
+                                                                        <h5 class="blog-date">@item.BlogDate.ToString("ddd, MMM d, yyyy")</h5>
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                        </div>
+                                                        <div class="col-md-6 d-flex justify-content-end align-items-center p-0">
+                                                            <div class="dropdown btn-drp">
+                                                                <button class="btn btn-secondary dropdown-toggle bookmark-dropdown" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
+                                                                    <span class="dt">...</span>
+                                                                </button>
+                                                                <div class="dropdown-menu blog-delete-dropdown" aria-labelledby="dropdownMenuButton">
+                                                                    <a href="#" class="bk-mr" id="remove-blog" data-id="@item.Id">
+                                                                        <span class="bookmak-dropdown-text">Listeden kaldır</span>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <div class="addthis_inline_share_toolbox"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="sub-border">
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    }
+                                }
+
+                            </div>
+                        </section>
+
+                        <section id="content2">
+                            <div class="row" style="margin:0">
+                                <div class="bookmark-list-group">
+                                    <h2 class="favorite-list-name">Takip edilenler listesi</h2>
+                                </div>
+                                @if (Model.AllFollowedUser.Count() == 0)
+                                {
+                                    <div class="fl-box">
+                                        <h4 class="fl1">Henüz takip ettiğiniz kimse yok</h4>
+                                        <h5 class="fl2">Yeni kişilerle takipleşmek için etkileşimde bulunmaya başlayın</h5>
+                                    </div>
+                                }
+                                else
+                                {
+                                    @foreach (var item in Model.AllFollowedUser)
+                                    {
+
+                                        <div class="col-md-10 list-column borders">
+                                            <div class="d-flex align-items-center">
+                                                <a href="#" class="follow-profile">
+                                                    <div class="in-usr-image">
+                                                        <img src="~/@item.Follower.Avatar" class="user-image float-left" />
+                                                    </div>
+                                                    <div class="usr-inf">
+                                                        <span class="blog-user-info">@item.Follower.FirstName</span>
+                                                        <span class="blog-user-info-lastname">@item.Follower.LastName</span><br />
+                                                    </div>
+                                                </a>
+                                                <div class="followClass">
+                                                    <button id="followed" data-id="@item.Follower.Id" class="btn btn-dark home-unfollow">Takip ediliyor</button>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    }
+                                }
+                            </div>
+                        </section>
+
+                        <section id="content3">
+                            <div class="row rows" style="margin:0;">
+                                @*@foreach (var item in Model.AllFollowerUser)
+                {
+
+                    <div class="col-md-12 borders">
+                        <div class=" d-flex justify-content-between">
+                            <div class="user-avatar-box">
+                                <img src="~/@item.Followee.Avatar" class="user-avatar" />
+                            </div>
+                            <div class="followed-users">
+                                <a asp-area="Users" asp-controller="Users" asp-action="UserProfile" asp-route-username="@item.Followee.FirstName" class="follower-user">
+                                    @item.Followee.FirstName
+                                </a>
+                                <h5 class="followed-usersname text-dark">@item.Followee.UserName</h5>
+                            </div>
+                            <div class="followClass">
+                                <a href="#" class="">Takip ediliyor</a>
+                            </div>
+                        </div>
+                    </div>
+
+                }*@
+
+                            </div>
+                        </section>
+
+                        <section id="content4">
+                            <p>
+                                CONTENT FIR TAB 4
+                            </p>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </article>
+        <nav class="left-sidebar">
+            <div class="main-nav">
+                <ul>
+                    <li>
+                        <a href="/"> <img src="~/home-svgrepo-com (2).svg" /></a>
+                    </li>
+                    <li>
+                        <a asp-area="Users" asp-controller="Users" asp-action="Notifications"><img src="~/notification-svgrepo-com.svg" /></a>
+                    </li>
+                    <li>
+                        <a asp-area="Users" asp-controller="Users" asp-action="Messages"><img src="~/noun-message-1068492.svg" class="message-icon" /></a>
+                    </li>
+                    <li>
+                        <a asp-area="Users" asp-controller="Users" asp-action="Set"><img src="~/edit-svgrepo-com.svg" /></a>
+                    </li>
+                    <li>
+                        <a asp-area="Users" asp-controller="Users" asp-action="Home">
+                            <img src="~/user.png" class="icon-home" />
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="dropdown-login">
+                <button class="dropdown-toggle dropdown-btn" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
+                    <div class="user-avatar-box-leftsidebar">
+                        <img src="~/@Model.User.Avatar" class="user-avatar-leftsidebar" />
+                    </div>
+                </button>
+                <div class="dropdown-menu logout-dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <div class="logout-user">
+                        <div class="user-avatar-box-leftsidebar">
+                            <img src="~/@Model.User.Avatar" class="user-avatar-leftsidebar" />
+                        </div>
+                        <a class="logout-username">@Model.User.UserName</a>
+                        <a href="#">hesabından çıkış yap</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <aside>
+            <div class="row suggested-topics">
+
+                @if (Model.LastBlogs.Count() == 0)
+                {
+                    <h2 class="suggested-topics-text" style="display:none">Son kaydedilenler</h2>
+                }
+                else
+                {
+                    <h2 class="suggested-topics-text">Son Yayınlananlar</h2>
+
+                    <div class="col-md-12">
+                        @foreach (var item in Model.LastBlogs)
+                        {
+                            <div class="col-md-12 last-column">
+                                <div class="last-blog-user-avatar-box">
+                                    <a href="#" class="in-group-usr">
+                                        <div class="in-usr-image">
+                                            <img src="~/@item.Avatar" class="user-image float-left" />
+                                        </div>
+                                        <div class="usr-inf">
+                                            <span class="blog-user-info">@item.FirstName</span>
+                                            <span class="blog-user-info-lastname">@item.LastName</span><br />
+                                            <h5 class="blog-date">@item.PersonelInfo</h5>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="blg-content-group">
+                                    <a href="#" class="lag-blog-anch">
+                                        <div class="last-blog-user">
+                                            <h4 class="blgtitle">@(item.BlogTitle.Length > 34 ? item.BlogTitle.Substring(0, 34) + "..." : item.BlogTitle)</h4>
+                                        </div>
+                                        <span class="blg-content">
+                                            @Html.Raw(item.BlogContent.Length > 200 ? item.BlogContent.Substring(0, 200) + "..." : item.BlogContent)
+                                        </span>
+                                    </a>
+                                    <h5 class="last-blog-date">@item.BlogDate.ToString("ddd, MMM d, yyyy")</h5>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        </aside>
+    </div>
+</div>
+
+
+
+<script>
+    $(document).ready(function () {
+        var firstName = $('.firstName').text();
+        var lastName = $('#lastName').text();
+        var intials = $('#firstName').text().charAt(0) + $('#lastName').text().charAt(0);
+        var profileImage = $('#profileImage').text(intials);
+    });
+
+</script>
+
+
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@functions{
+    public string GetAntiXsrfRequestToken()
+    {
+        return Xsrf.GetAndStoreTokens(Context).RequestToken;
+    }
+}
+
+
+
+<script type="text/javascript">
+
+    $(".FollowGroup").on("click", "#follow", function () {
+        var btn = $(this)
+        var id = btn.data("id")
+
+        var t = $("input[name='__RequestVerificationToken']").val()
+
+            $.ajax({
+                type: "GET",
+                headers:
+                {
+                    "RequestVerificationToken": '@GetAntiXsrfRequestToken()'
+                },
+                url: "/Users/Users/UserId/" + id,
+                success: function (data) {
+                    btn.text('Takip ediliyor')
+                    btn.attr('id', 'followed')
+                },
+            });
+    });
+
+</script>
+
+<script type="text/javascript">
+    $(function () {
+        $(".FollowGroup").on("click", "#followed", function () {
+            var btn = $(this)
+            var id = btn.data("id")
+
+            $.ajax({
+                type: "GET",
+                headers:
+                {
+                    "RequestVerificationToken": '@GetAntiXsrfRequestToken()'
+                },
+                url: "/Users/Users/IsFollowing/" + id,
+                success: function (data) {
+                    btn.text('Takip et')
+                    btn.attr('id', 'follow')
+                }
+            })
+        })
+    })
+</script>
+

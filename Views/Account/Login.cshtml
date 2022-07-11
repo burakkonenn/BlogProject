@@ -1,0 +1,187 @@
+﻿
+@model Tuple<BlogProject.Areas.Identity.Model.LoginModel, BlogProject.Areas.Identity.Model.RegisterModel>
+
+
+
+<div class="container LoginContainer" id="container">
+    <div class="form-container sign-up-container">
+
+
+        <form asp-controller="Account" asp-action="Register" method="POST" enctype="multipart/form-data" id="booking-form" class="RegisterForm">
+
+            <div class="tab-content">
+                <div class="tab-pane" id="step1">
+                    <div class="upload">
+                        <div class="preview-image justify-content-center">
+                            @*<label for="upload-photo">*@
+                            <div class="errorTxt"></div>
+
+                            <div class="preview-box">
+                                <label for="upload-photo" class="">
+                                    <i class="fa-solid fa-user"></i>
+                                </label>
+                                <img id="ImgPreview" style="display:none" />
+                            </div>
+                            <div class="preview-text">
+                                <label for="upload-photo" class="ProfileImage">Profil fotoğrafı yükle</label>
+                                <input type="file" @*asp-for="@Model.Item2.Avatar"*@ name="Avatar" id="upload-photo" accept="image/*" oninvalid="setCustomValidity('Please, blah, blah, blah ')" onchange="ImgPre(this)" />
+
+                            </div>
+                            @*</label>*@
+                        </div>
+                    </div>
+                    <div class="preview">
+                        <img id="file-ip-1-preview">
+                    </div>
+                    <button class="next-btn next-btn1" type="button">Next</button>
+
+                </div>
+                <div class="tab-pane" id="step2">
+
+                    <div class="LoginFirstName">
+                        <input name="firstname" class="form-control Loginİnput rounded-0" placeholder="İsminiz.." />
+                    </div>
+
+                    <button class="next-btn next-btn2" type="button">Next</button>
+
+                </div>
+                <div class="tab-pane" id="step3">
+
+                    <div class="">
+                        <input name="lastname" class="form-control Loginİnput  rounded-0" placeholder="Soy isminiz.." />
+                    </div>
+
+                    <button class="next-btn next-btn3" type="button">Next</button>
+
+                </div>
+                <div class="tab-pane" id="step4">
+
+                    <div class="">
+                        <div class="">
+                            <input name="username" class="form-control Loginİnput  rounded-0" placeholder="Kullanıcı adınızı" />
+                        </div>
+
+                        <h2 class="and">ve</h2>
+                        <div class="">
+                            <input name="title" class="form-control Loginİnput  rounded-0" placeholder="kendiniz için bir ünvan belirleyin.." />
+                        </div>
+                    </div>
+
+                    <button class="next-btn next-btn4" type="button">Next</button>
+
+                </div>
+                <div class="tab-pane" id="step5">
+
+                    <div class="">
+                        <div class="">
+                            <input name="email" class="form-control Loginİnput  rounded-0" placeholder="Email" />
+                        </div>
+                        <h2 class="and">ve</h2>
+
+                        <div class="">
+                            <input name="password" class="form-control Loginİnput  rounded-0" placeholder="Şifre" />
+                        </div>
+                    </div>
+
+                    <button type="submit" class="mt-2 LoginBtn submit-btn">Kayıt ol</button>
+
+                </div>
+            </div>
+
+            <div class="progress-wrap">
+                <div class="line-progress-bar">
+                    <div class="line"></div>
+                    <ul class="checkout-bar">
+                        <li class="progressbar-dots active"><span>step 1</span></li>
+                        <li class="progressbar-dots"><span>step 2</span></li>
+                        <li class="progressbar-dots"><span>step 3</span></li>
+                        <li class="progressbar-dots"><span>step 4</span></li>
+                        <li class="progressbar-dots"><span>Final step</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="loader" style="display: none;">
+                <img src="//d2erq0e4xljvr7.cloudfront.net/assets/img/ring.svg">
+            </div>
+
+        </form>
+
+    </div>
+    <div class="form-container sign-in-container">
+        <div class="row">
+            <h1 class="mt-5 mb-4">Giriş Yap</h1>
+            <div class="col-md-12 mb-2">
+                <form method="post" asp-action="ExternalLogin" asp-route-returnUrl="@Model.Item1.ReturnUrl">
+                    <div class="d-flex">
+
+                        @for (int i = 0; i < Model.Item1.ExternalLogins.Count; i++)
+                        {
+
+
+                            @if (@Model.Item1.ExternalLogins[i].DisplayName.Contains("Facebook"))
+                            {
+                                <div class="social-container">
+                                    <button type="submit" class="social" style="width:auto"
+                                            name="provider"
+                                            value="@Model.Item1.ExternalLogins[i].DisplayName"
+                                            title="Login using your @Model.Item1.ExternalLogins[i].DisplayName account">
+                                        <i class="fab fa-facebook-f"></i>
+                                    </button>
+                                </div>
+                            }
+
+                            @if (@Model.Item1.ExternalLogins[i].DisplayName.Contains("Google"))
+                            {
+                                <div class="social-container">
+                                    <button type="submit" class="social" style="width:auto"
+                                            name="provider"
+                                            value="@Model.Item1.ExternalLogins[i].DisplayName"
+                                            title="Login using your @Model.Item1.ExternalLogins[i].DisplayName account">
+                                        <i class="fab fa-google-plus-g"></i>
+                                    </button>
+                                </div>
+                            }
+
+                        }
+
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div>
+            <form asp-action="Login" asp-controller="Account" method="POST">
+
+                <span class="mb-3 mt-3 FormSpan">ya da kullanıcı hesabın ile giriş yap</span>
+                <input type="hidden" name="ReturnUrl" value="@ViewBag.ReturnUrl">
+                <div class="appform-group mb-3">
+                    <input asp-for="Item1.Email" class="form-control Loginİnput  rounded-0" placeholder="Email" />
+                    <span asp-validation-for="Item1.Email" class="text-danger login-validation"></span>
+                </div>
+                <div class="appform-group mb-3">
+                    <input asp-for="Item1.Password" class="form-control Loginİnput  rounded-0" placeholder="Şifre" />
+                    <span asp-validation-for="Item1.Password" class="text-danger login-validation"></span>
+
+                </div>
+                <a class="ForgotPassword" href="#"><span>Şifreni mi unuttun?</span></a>
+                <button class="LoginBtn mt-3" type="submit">Giriş Yap</button>
+
+            </form>
+        </div>
+    </div>
+    <div class="overlay-container">
+        <div class="overlay">
+            <div class="overlay-panel overlay-left">
+                <h1>Welcome Back!</h1>
+                <p>To keep connected with us please login with your personal info</p>
+                <button class="ghost LoginBtnSignUp" id="signIn">Sign In</button>
+            </div>
+            <div class="overlay-panel overlay-right">
+                <h1>Hello, Friend!</h1>
+                <p>Enter your personal details and start journey with us</p>
+                <button class="ghost LoginBtnSignUp" id="signUp">Sign Up</button>
+            </div>
+        </div>
+    </div>
+</div>
+

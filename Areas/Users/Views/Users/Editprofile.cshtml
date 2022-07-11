@@ -1,0 +1,111 @@
+﻿<script src="~/lib/jquery/jquery.min.js"></script>
+<script src="~/lib/jquery-validate/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+@model BlogProject.Areas.Users.Model.RegisterEditViewModel
+
+
+@Html.AntiForgeryToken()
+
+<div class="container">
+    <div id='main'>
+        <article>
+            <div class="row eee" style="margin:0">
+                <div class="col-md-10">
+                    <form asp-area="users" asp-controller="users" asp-action="editprofile" method="post" class="edit-register-form" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <div class="row">
+                                <div class="avatar-upload">
+                                    <div class="avatar-edit">
+                                        <input type="file" asp-for="@Model.AvatarUpload" onchange="loadFile(event)" id="imageUpload" accept=".png, .jpg, .jpeg" />
+                                        <span asp-validation-for="@Model.AvatarUpload"></span>
+                                        <input type="hidden" asp-for="@Model.AvatarUrl" onchange="loadFile(event)" id="imageUpload" accept=".png, .jpg, .jpeg" />
+                                        <label for="imageUpload"></label>
+                                    </div>
+                                    <div class="avatar-preview">
+                                        <img class="profile-pic" src="~/@Model.AvatarUrl" id="output">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <input type="hidden" name="Id" value="@Model.Id" />
+                            <h4 class="form-label">İsim</h4>
+                            <input asp-for="@Model.FirstName" class="form-control rounded-0">
+                            <span asp-validation-for="@Model.FirstName"></span>
+                            <p>Adınız profil sayfanızda ve yanıtlarınızda görünür.Zorunlu bir alandır.</p>
+                        </div>
+                        <div class="mb-3">
+                            <h4 class="form-label">Kişisel bilgiler</h4>
+                            <input asp-for="@Model.PersonalInfo" class="form-control rounded-0">
+                            <span asp-validation-for="@Model.PersonalInfo"></span>
+
+                            <p>Kısa biyografiniz profilinizde ve bloglarınızda görünecektir.</p>
+                        </div>
+                        <div class="mb-3">
+                            <h4 class="form-label">İnternet sitesi</h4>
+                            <input asp-for="@Model.WebSite" class="form-control rounded-0">
+                            <span asp-validation-for="@Model.WebSite"></span>
+                            <p>İnternet siteniz profilinizde ve bloglarınızda görünecektir.</p>
+                        </div>
+                        <div class="mb-3">
+                            <h4 class="form-label">Konum</h4>
+                            <input asp-for="@Model.Location" class="form-control rounded-0">
+                            <span asp-validation-for="@Model.Location"></span>
+                            <p>Hangi şehirde yaşadığınız profilinizde görünecektir.</p>
+                        </div>
+                        <button class="btn btn-dark save-register" type="submit">Kaydet</button>
+                    </form>
+                </div>
+            </div>
+        </article>
+        <nav class="left-sidebar">
+            <div class="main-nav">
+                <ul>
+                    <li>
+                        <a href="/"> <img src="~/home-svgrepo-com (2).svg" /></a>
+                    </li>
+                    <li>
+                        <a asp-area="Users" asp-controller="Users" asp-action="Notifications"><img src="~/notification-svgrepo-com.svg" /></a>
+                    </li>
+                    <li>
+                        <a asp-area="Users" asp-controller="Users" asp-action="Messages"><img src="~/noun-message-1068492.svg" class="message-icon" /></a>
+                    </li>
+                    <li>
+                        <a asp-area="Users" asp-controller="Users" asp-action="Set"><img src="~/edit-svgrepo-com.svg" /></a>
+                    </li>
+                    <li>
+                        <a asp-area="Users" asp-controller="Users" asp-action="Home">
+                            <img src="~/user.png" class="icon-home" />
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="dropdown-login">
+                <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
+                    <div class="user-avatar-box-leftsidebar">
+                        <img src="~/@ViewBag.UserAvatar" class="user-avatar-leftsidebar" />
+                    </div>
+                </button>
+                <div class="dropdown-menu logout-dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <div class="logout-user">
+                        <div class="user-avatar-box-leftsidebar">
+                            <img src="~/@ViewBag.UserAvatar" class="user-avatar-leftsidebar" />
+                        </div>
+                        <a class="logout-username">@ViewBag.UserName</a>
+                        <a href="#">hesabından çıkış yap</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+</div>
+
+
+<script>
+    var loadFile = function (event) {
+        var image = document.getElementById("output");
+        image.src = URL.createObjectURL(event.target.files[0]);
+    };
+
+</script>

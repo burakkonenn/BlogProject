@@ -1,0 +1,523 @@
+﻿
+@model BlogProject.Areas.Users.Model.ViewModel
+
+@{
+    ViewData["Title"] = "UserBlogDetails";
+}
+
+
+@{
+    var word_count = @Model.BlogDetails;
+    var counts = word_count.Content.Split(' ');
+    var resultcount = counts.Length;
+    var minutes = resultcount / 250;
+    var seconds = resultcount % 250 / (250 / 60);
+    var str_minutes = (minutes == 1) ? "Minute" : "Minuten";
+    var str_seconds = (seconds == 1) ? "second" : "Sekunden";
+    var returnstring = "";
+    if (minutes == 0)
+    {
+        returnstring = seconds + str_seconds + ' ' + " (" + resultcount + ')' + " Words";
+    }
+    else
+    {
+        returnstring = minutes + str_minutes + ' ' + seconds + str_seconds + " (" + resultcount + ')' + " Words";
+    }
+}
+
+
+@Html.AntiForgeryToken()
+
+<div class="container">
+    <div id='main'>
+        <article>
+            <div class="row d-flex justify-content-center user-info-row" style="margin:0;">
+                <div class="col-md-10 d-flex info-column">
+                    <a asp-area="Users" asp-controller="Users" asp-action="UserProfile" asp-route-firstname="@Model.BlogDetails.FirstName" class="d-flex user-blog-page">
+                        <img src="~/@Model.BlogDetails.AvatarUrl" class="user-avatar-blog" />
+                        <div class="blog-box">
+                            <div class="user-blog-inf">
+                                <h4 class="blog-users-name">@Model.BlogDetails.FirstName</h4>
+                                <h4 class="blog-users-lastname">@Model.BlogDetails.LastName</h4>
+                            </div>
+                            <div class="sub-user-inf">
+                                <span class="text-secondary blog-users-date" style="font-size:10px">@Model.BlogDetails.Date.ToString("ddd, MMM d, yyyy") - </span>
+                                <span class="min">@minutes min</span>
+                                <a href="#" class="bookmark-anc">
+                                    <img src="~/bookmark (1).png" class="bookmark-icon" />
+                                </a>
+                            </div>
+                        </div>
+                    </a>
+                    <div class="social">
+                        <div class="addthis_inline_share_toolbox" id="icons"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row d-flex justify-content-center mt-4" style="margin:0">
+                <div class="col-md-10">
+                    <div class="card p-0" style="border:0">
+                        <div class="card-body p-0">
+                            <h5 class="card-title blgtitle">@Model.BlogDetails.Title</h5>
+                            <p class="card-text">@Html.Raw(Model.BlogDetails.Content)</p>
+                        
+                        </div>
+                        <div class="blg-detail-field">
+
+                            <a data-id="@Model.BlogDetails.BlogId" id="like-button">
+                                <img src="~/icons8-heart-30.png" class="img-png" />
+                            </a>
+                            <span class="like-count"></span>
+
+
+                            <a data-id="@Model.BlogDetails.BlogId" id="add-comment" data-toggle="modal" data-target="#commentModal">
+                                <img src="~/comment-svgrepo-com.svg" />
+                                <span class="comment-count">@Model.BlogDetails.Comments.Count()</span>
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+
+        <div class="modal fade" id="commentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div class="comment-card">
+                            <h4>Gelen yorumlar</h4>
+                            <h4 class="comment-count">@Model.BlogDetails.Comments.Count()</h4>
+                        </div>
+                        <div class="comment-box-modal">
+                            <div class="user-modal-box">
+                                <div class="user-comment-image">
+                                    <img src="~/@Model.User.Avatar" />
+                                </div>
+                                <div>
+                                    <h4>@Model.User.FirstName</h4>
+                                </div>
+                            </div>
+                            <form action="/" id="formComment" method="post">
+                                <textarea id="comment-field" name="commentvalidation" onkeyup="textAreaAdjust(this)" style="overflow:hidden" class="form-control" placeholder="Yorum bırak.."></textarea>
+                                <input type="hidden" name="BlogId" value="@Model.BlogDetails.BlogId" id="blog-Id" />
+                                <div class="comment-btn-group">
+                                    <button class="btn btn-info btn-sm comment-btn-cancel" data-dismiss="modal" type="button">İptal</button>
+                                    <button class="btn btn-success comment-btn" type="submit">Gönder</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="res responses">
+                            @foreach (var item in Model.BlogDetails.Comments)
+                            {
+                                <div class="responses-card">
+                                    <div class="card-body">
+                                        <div class="d-flex">
+                                            <h5 class="card-title respond-firstname">@item.CommentFirstname</h5>
+                                            <h5 class="card-title respond-lastname">@item.CommentLastname</h5>
+                                        </div>
+                                        <p class="card-text respond-message">@item.CommentMessage</p>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <nav class="left-sidebar">
+            <div class="main-nav">
+                <ul>
+                    <li>
+                        <a href="/"> <img src="~/home-svgrepo-com (2).svg" /></a>
+                    </li>
+                    <li>
+                        <a asp-area="Users" asp-controller="Users" asp-action="Notifications"><img src="~/notification-svgrepo-com.svg" /></a>
+                    </li>
+                    <li>
+                        <a asp-area="Users" asp-controller="Users" asp-action="Messages"><img src="~/noun-message-1068492.svg" class="message-icon" /></a>
+                    </li>
+                    <li>
+                        <a asp-area="Users" asp-controller="Users" asp-action="Set"><img src="~/edit-svgrepo-com.svg" /></a>
+                    </li>
+                    <li>
+                        <a asp-area="Users" asp-controller="Users" asp-action="Home">
+                            <img src="~/user.png" class="icon-home" />
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="dropdown-login">
+                <button class="dropdown-toggle dropdown-btn" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
+                    <div class="user-avatar-box-leftsidebar">
+                        <img src="~/@Model.User.Avatar" class="user-avatar-leftsidebar" />
+                    </div>
+                </button>
+                <div class="dropdown-menu logout-dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <div class="logout-user">
+                        <div class="user-avatar-box-leftsidebar">
+                            <img src="~/@Model.User.Avatar" class="user-avatar-leftsidebar" />
+                        </div>
+                        <a class="logout-username">@Model.User.UserName</a>
+                        <a href="#">hesabından çıkış yap</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <aside>
+            <div class="row usr-row d-flex justify-content-center">
+                <div class="col-md-12 col-inf">
+                    <div class="last-blog-user-avatar-box">
+                        <a href="#" class="in-group-usr">
+                            <div class="in-usr-image">
+                                <img src="~/@Model.BlogDetails.AvatarUrl" class="user-image float-left" />
+                            </div>
+                            <div class="usr-inf">
+                                <span class="blog-user-info">@Model.BlogDetails.FirstName</span>
+                                <span class="blog-user-info-lastname">@Model.BlogDetails.LastName</span><br />
+                                <h5 class="blog-date">@Model.BlogDetails.PersonelInfo</h5>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="row info-row" style="margin:0">
+                <div class="col-md-12 info-col">
+                    <button id="follow" data-id="@Model.BlogDetails.Id" class="btn btn-dark text-dark follw-btn" style="background-color:lawngreen">Takip et</button>
+                    <!-- Button trigger modal -->
+                    <button class="btn btn-primary comment-modal" data-toggle="modal" data-target="#exampleModal-@Model.BlogDetails.Id" data-id="@Model.BlogDetails.Id">
+                        <img src="~/icons8-new-message-24.png" />
+                    </button>
+
+                    <div class="modal fade" id="exampleModal-@Model.BlogDetails.Id" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <div class="row d-flex justify-content-center" style="margin:0">
+                                        <div class="col-md-12 p-0">
+                                            <div class="comment-card">
+                                                <div class="d-flex blog-user-image mb-3">
+                                                    <div class="usr-blg">
+                                                        <img src="~/@Model.BlogDetails.AvatarUrl" class="blog-user-avatar" />
+                                                    </div>
+                                                    <div class="blog-info">
+                                                        <a href="">
+                                                            <h3 class="blog-user-firstname">@Model.BlogDetails.FirstName</h3>
+                                                        </a>
+                                                    </div>
+                                                </div>
+
+                                                <form asp-area="users" asp-controller="users" asp-action="SendMessage" method="post">
+                                                    <input type="hidden" asp-for="@Model.BlogDetails.Id" />
+                                                    <span asp-validation-for="@Model.BlogDetails.Id" class="validation"></span>
+                                                    <textarea class="form-control" asp-for="@Model.Message" placeholder="Mesaj gönder.."></textarea>
+                                                    <span asp-validation-for="@Model.Message" class="validation"></span>
+                                                    <div class="comment-btn-group">
+                                                        <button class="btn btn-info btn-sm comment-btn-cancel" data-dismiss="modal" type="button">İptal</button>
+                                                        <button class="btn btn-success comment-btn data" type="submit">Gönder</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                <div class="row suggested-topics d-flex justify-content-center">
+
+                    @if (Model.UserBlogDetail.Count() == 0)
+                    {
+                        <h2 class="suggested-topics-text" style="display:none">En Son Yayınlananlar</h2>
+                    }
+                    else
+                    {
+                        <h2 class="suggested-topics-text">Son Yayınlananlar</h2>
+
+                        <div class="col-md-12 publish-col">
+                            @foreach (var item in Model.UserBlogDetail)
+                            {
+                                <div class="last-blog-user-avatar-box">
+                                    <a href="#" class="in-group-usr">
+                                        <div class="in-usr-image">
+                                            <img src="~/@item.UserAvatar" class="user-image float-left" />
+                                        </div>
+                                        <div class="usr-inf">
+                                            <span class="blog-user-info">@item.Firstname</span>
+                                            <span class="blog-user-info-lastname">@item.LastName</span><br />
+                                            <h5 class="blog-date">@item.PersonalInfo</h5>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="blg-content-group">
+                                    <a href="#" class="lag-blog-anch">
+                                        <div class="last-blog-user">
+                                            <h4 class="blgtitle">@(item.Title.Length > 34 ? item.Title.Substring(0, 34) + "..." : item.Title)</h4>
+                                        </div>
+                                    </a>
+                                    <h5 class="last-blog-date">@item.Date.ToString("ddd, MMM d, yyyy")</h5>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+        </aside>
+
+
+    </div>
+</div>
+
+
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@functions{
+    public string GetAntiXsrfRequestToken()
+    {
+        return Xsrf.GetAndStoreTokens(Context).RequestToken;
+    }
+}
+
+
+<script>
+    $(function () {
+
+
+        $('#formComment').validate({ // initialize the plugin
+            rules: {
+                commentvalidation: {
+                    required: true,
+                },
+
+            },
+            messages: {
+                commentvalidation: "Soru zorunlu bir alan",
+            },
+
+            submitHandler: function (form) {
+                var data = {
+                    Message: $("#comment-field").val(),
+                    BlogId: $("#blog-Id").val()
+                }
+
+                $.ajax({
+                    type: "post",
+                    data: data,
+                    dataType: "JSON",
+                    url: "/users/users/GetToComments/",
+                    success: function (data) {
+                                let parseData = JSON.parse(data);
+                                var value = "";
+                                value += `<div class="responses-card">
+                                                <div class="card-body">
+                                                     <div class="d-flex">
+                                                        <h5 class="card-title respond-firstname">@Model.User.FirstName</h5>
+                                                        <h5 class="card-title respond-lastname">@Model.User.LastName</h5>
+                                                    </div>
+                                                    <p class="card-text respond-message">${parseData.Message}</p>
+                                                </div>
+                                            </div>`;
+                                $(".responses").append(value);
+                            }
+                })
+            }
+
+        });
+
+
+
+
+    });
+</script>
+
+
+
+<script>
+    function textAreaAdjust(element) {
+        element.style.height = "1px";
+        element.style.height = (15 + element.scrollHeight) + "px";
+    }
+</script>
+
+<script>
+    $('.comment-modal').on('click', function (e) {
+        var passedID = $(this).data('id');
+
+        console.log(passedID);
+        $(".modal-body .data").val(passedID);
+        var data = $(".data").val();
+        console.log(data);
+    });
+</script>
+
+
+<script>
+    $(function () {
+
+        $(".container").on("click", "#like-button", function () {
+            var btn = $(this)
+            var id = btn.data("id")
+
+
+            $.ajax({
+                type: "GET",
+                url: "/Users/Users/like/" + id,
+                success: function (data) {
+                    $(".like-count").html(data);
+                    btn.attr('id', 'un-like')
+                }
+            })
+        })
+    })
+</script>
+
+<script>
+    $(function () {
+        $(".container").on("click", "#un-like", function () {
+            var btn = $(this)
+            var id = btn.data("id")
+
+            $.ajax({
+                type: "GET",
+                url: "/Users/Users/unlike/" + id,
+                success: function (data) {
+                    $(".like-count").html(data);
+                    btn.attr('id', 'like-button')
+                }
+            })
+        })
+    })
+</script>
+
+<script>
+    $(function () {
+        //var flag = false;
+
+        $(".container").on("click", "#save-button", function () {
+            var btn = $(this)
+            var id = btn.data("id")
+
+
+            $.ajax({
+                type: "GET",
+                url: "/Users/Users/savelist/" + id,
+                success: function (data) {
+
+                    console.log(data);
+                    var bookmark = "";
+                    bookmark += `<i class="fa-solid fa-bookmark"></i>`;
+
+                    $(".bookmark").html(bookmark);
+                    //$("#span").html(data);
+                    btn.attr('id', 'remove-list')
+                }
+            })
+        })
+    })
+</script>
+
+<script>
+    $(function () {
+        //var flag = false;
+
+        $(".container").on("click", "#remove-list", function () {
+            var btn = $(this)
+            var id = btn.data("id")
+
+
+            $.ajax({
+                type: "GET",
+                url: "/Users/Users/removelist/" + id,
+                success: function (data) {
+                    //var like = parseInt($("#span").text());
+                    //if (flag) {
+                    //    like += 1;
+                    //}
+                    //else {
+                    //    like -= 1;
+                    //}
+                    //$("#span").text(like);
+                    console.log(data);
+                    //$("#span").html(data);
+                    btn.attr('id', 'save-button')
+                }
+            })
+        })
+    })
+</script>
+
+<script type="text/javascript">
+
+        $(".container").on("click", "#follow", function () {
+            var btn = $(this)
+            var id = btn.data("id")
+
+            var t = $("input[name='__RequestVerificationToken']").val()
+
+                $.ajax({
+                    type: "GET",
+                    headers:
+                    {
+                        "RequestVerificationToken": '@GetAntiXsrfRequestToken()'
+                    },
+                    url: "/Users/Users/UserId/" + id,
+                    success: function (data) {
+                        btn.text('Takip ediliyor')
+                        btn.attr('id', 'followed')
+                    },
+                });
+        });
+
+</script>
+
+<script type="text/javascript">
+        $(function () {
+            $(".container").on("click", "#followed", function () {
+                var btn = $(this)
+                var id = btn.data("id")
+
+                $.ajax({
+                    type: "GET",
+                    headers:
+                    {
+                        "RequestVerificationToken": '@GetAntiXsrfRequestToken()'
+                    },
+                    url: "/Users/Users/IsFollowing/" + id,
+                    success: function (data) {
+                        btn.text('Takip et')
+                        btn.attr('id', 'follow')
+                    }
+                })
+            })
+        })
+</script>
+
+
+<script type="text/javascript">
+        $(function () {
+            $(".container").on("click", "#followed", function () {
+                var btn = $(this)
+                var id = btn.data("id")
+
+                $.ajax({
+                    type: "GET",
+                    headers:
+                    {
+                        "RequestVerificationToken": '@GetAntiXsrfRequestToken()'
+                    },
+                    url: "/Users/Users/IsFollowing/" + id,
+                    success: function (data) {
+                        btn.text('Takip et')
+                        btn.attr('id', 'follow')
+                    }
+                })
+            })
+        })
+</script>

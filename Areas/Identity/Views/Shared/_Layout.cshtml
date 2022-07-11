@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - BlogProject</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Epilogue&family=Hahmlet:wght@300&family=JetBrains+Mono:wght@300&family=Roboto:wght@400;500&family=Sora&family=Work+Sans&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+
+
+</head>
+<body>
+    <header>
+        <div id="topheader">
+            <nav class="navbar navbar-expand-sm" style="background-color:black">
+                <div class="container-fluid d-flex align-items-center">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="/">BEATBLOG</a>
+                    </div>
+                    <div class="collapse navbar-collapse d-flex justify-content-center align-items-center" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item active"><a class="nav-link" href="/">Ana Sayfa<span class="sr-only">(current)</span></a></li>
+                            <li class="nav-item"><a class="nav-link" href="#page2">Popüler Bilim</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#page3">Mimarlık</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#page3">Tasarım</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#page3">Fotoğrafçılık</a></li>
+
+                        </ul>
+                    </div>
+                    <div class="d-flex">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <a asp-area="Identity" asp-controller="Account" asp-action="Login" class="nav-link text-white" style="text-decoration:none">@User.Identity.Name</a>
+                            <a asp-area="Identity" asp-controller="Account" asp-action="Logout" class="nav-link text-white" style="text-decoration:none">Çıkış Yap</a>
+                        }
+                        else
+                        {
+                            <a asp-area="Identity" asp-controller="Account" asp-action="Login" class="nav-link text-white" style="text-decoration:none">Giriş Yap/Kayıt ol</a>
+                        }
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2022 - BlogProject - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+        $('nav .navbar-nav a').on('click',
+            function () {
+                $('nav .navbar-nav').find('li.active')
+                    .removeClass('active');
+                $(this).parent('li').addClass('active');
+            });
+
+    </script>
+</body>
+</html>

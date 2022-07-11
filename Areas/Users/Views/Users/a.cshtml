@@ -1,0 +1,22 @@
+﻿@model BlogProject.Areas.Users.Model.ViewModel
+
+
+
+
+
+@foreach (var item in Model.cat)
+{
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
+            @item.Name
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            @foreach (var items in item.Blogs)
+            {
+                <a class="dropdown-item" href="#">@items.Title</a>
+                <a class="dropdown-item" href="#">@items.Content</a>
+
+            }
+        </div>
+    </div>
+}

@@ -1,0 +1,48 @@
+﻿
+@model BlogProject.Areas.Users.Model.UserModel
+
+
+<div class="modal fade" id="EditModal">
+    <div class="modal-dialog">
+        <div class="modal-content" style="background-color:black">
+            <div class="modal-header">
+                <h5 class="modal-title text-white" id="staticBackdropLabel">Profili düzenle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form asp-area="Admin" asp-controller="User" asp-action="test" enctype="multipart/form-data" id="Editform" method="post">
+
+                    <div>
+                        <input type="hidden" asp-for="@Model.Id" />
+                        <img src="~/@Model.AvatarUrl" class="home-avatar" />
+                        <input type="hidden" asp-for="@Model.AvatarUrl" />
+                        <input type="file" name="file" accept="image*" class="form-control rounded-0 image" />
+                    </div>
+                    @*<div class="mb-3">
+                            <input asp-for="@Model.FirstName" class="form-control rounded-0 first" placeholder="İsim">
+                        </div>
+                        <div class="mb-3">
+                            <textarea asp-for="@Model.PersonelInfo" class="form-control rounded-0 personel" placeholder="Kişisel bilgiler"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <input asp-for="@Model.Location" class="form-control rounded-0" placeholder="Konum">
+                        </div>
+                        <div class="mb-3">
+                            <input asp-for="@Model.WebSite" class="form-control rounded-0" placeholder="İnternet sitesi">
+                        </div>*@
+                <button type="submit">adasd</button>
+                    </form>
+
+
+
+            </div>
+            @*<div class="modal-footer">
+                <button type="button" class="btn btn-secondary" style="background-color:aqua" data-dismiss="modal">İptal</button>
+                <button type="button" data-save="modal">Kaydet</button>
+
+            </div>*@
+        </div>
+    </div>
+</div>

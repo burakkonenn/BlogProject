@@ -1,0 +1,369 @@
+﻿
+@model BlogProject.Areas.Users.Model.ViewModel
+
+
+@Html.AntiForgeryToken()
+
+
+
+<div class="container">
+    <div id='main'>
+        <article>
+            <div class="row blog-row">
+                @foreach (var item in Model.Blogs)
+                {
+                    <div class="col-md-10 blog-card-col">
+                        <div class="">
+                            <div class="row p-0" style="margin:0">
+                                <a asp-area="Users" asp-controller="Users" asp-action="UserBlogDetails" asp-route-title="@item.Title" class="users-blog-route">
+                                    <div class="col-md-9 text-justify blog-content-column">
+                                        <h5 class="blog-title">@(item.Title.Length > 50 ? item.Title.Substring(0, 57) + "..." : item.Title)</h5>
+                                        <span class="blog-content">
+                                            @Html.Raw(item.Content.Length > 370 ? item.Content.Substring(0, 370) + "..." : item.Content)
+                                        </span>
+                                    </div>
+                                    <div class="col-md-3 blog-images-col">
+                                        <div class="blog-image-box">
+                                            <img src="~/@item.Image" class="blog-images rounded-0">
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="row user-blog-detail" style="margin:0">
+                                <div class="col-md-12 d-flex align-items-center justify-content-between p-0">
+                                    <a asp-area="Users" asp-controller="Users" asp-action="UserProfile" asp-route-username="@item.User.UserName" class="action-usr">
+                                        <div class="in-group-usr">
+                                            <div class="in-usr-image">
+                                                <img src="~/@item.User.Avatar" class="user-image float-left" />
+                                            </div>
+                                            <div class="usr-inf">
+                                                <span class="blog-user-info">@item.User.FirstName</span>
+                                                <span class="blog-user-info-lastname">@item.User.LastName</span><br />
+                                                <h5 class="blog-date">@item.Date.ToString("ddd, MMM d, yyyy")</h5>
+                                            </div>
+                                        </div>
+                                    </a>
+
+                                    <div class="action-grp">
+                                        <button class="bookmark-button" id="save-button" data-id="@item.Id">
+                                            <img src="~/bookmark (1).png" class="bookmark-icon" />
+                                        </button>
+                                        <button id="follow" data-id="@item.User.Id" class="btn btn-dark explore-follow-button">Takip et</button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+          
+        </article>
+        <nav class="left-sidebar">
+            <div class="main-nav">
+                <ul>
+                    <li>
+                        <a href="/"> <img src="~/home-svgrepo-com (2).svg" /></a>
+                    </li>
+                    <li>
+                        <a asp-area="Users" asp-controller="Users" asp-action="Notifications"><img src="~/notification-svgrepo-com.svg" /></a>
+                    </li>
+                    <li>
+                        <a asp-area="Users" asp-controller="Users" asp-action="Messages"><img src="~/noun-message-1068492.svg" class="message-icon" /></a>
+                    </li>
+                    <li>
+                        <a asp-area="Users" asp-controller="Users" asp-action="Set"><img src="~/edit-svgrepo-com.svg" /></a>
+                    </li>
+                    <li>
+                        <a asp-area="Users" asp-controller="Users" asp-action="Home">
+                            <img src="~/user.png" class="icon-home" />
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="dropdown-login">
+                <button class="dropdown-toggle dropdown-btn" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
+                    <div class="user-avatar-box-leftsidebar">
+                        <img src="~/@Model.User.Avatar" class="user-avatar-leftsidebar" />
+                    </div>
+                </button>
+                <div class="dropdown-menu logout-dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <div class="logout-user">
+                        <div class="user-avatar-box-leftsidebar">
+                            <img src="~/@Model.User.Avatar" class="user-avatar-leftsidebar" />
+                        </div>
+                        <a class="logout-username">@Model.User.FirstName</a>
+                        <a href="#">hesabından çıkış yap</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <aside>
+
+            <div class="row in-row">
+                <div class="col-md-12 in-col">
+                    <input type="text" class="form-control fontAwesome search-input" placeholder="&#xf002; Ara.." name="name" value="" />
+                </div>
+            </div>
+
+            <div class="row follow-row">
+                <h2 class="follow-text text-center">Takip Edebileceğin Kişiler</h2>
+                @foreach (var item in Model.Following)
+                {
+                    <div class="col-md-10 follow-col">
+                        <div class="d-flex follow-group">
+                            <a href="#" class="in-group-usr">
+                                <div class="in-usr-image">
+                                    <img src="~/@item.AvatarUrl" class="user-image float-left" />
+                                </div>
+                                <div class="usr-inf">
+                                    <span class="blog-user-info">@item.FirstName</span>
+                                    <span class="blog-user-info-lastname">@item.LastName</span><br />
+                                    @*<h5 class="blog-date">@(item.PersonelInfo.Length > 15 ? item.PersonelInfo.Substring(0,15) + "..." : item.PersonelInfo)</h5>*@
+                                </div>
+                            </a>
+                            <button id="follow" data-id="@item.Id" class="btn btn-dark FollowButton">Takip et</button>
+
+                        </div>
+                    </div>
+                }
+            </div>
+
+
+            <div class="row suggested-topics">
+                <h2 class="suggested-topics-text">Önerilen konular</h2>
+                <div class="col-md-10 sug-col d-flex flex-wrap">
+                    @foreach (var item in Model.Category)
+                    {
+                        <a asp-area="Users" asp-controller="Users" asp-action="a" asp-route-name="@item.Name" class="btn btn-dark text-white flex-wrap tag-button">@item.Name</a>
+                    }
+                </div>
+            </div>
+
+            <div class="row last-row">
+            @if (Model.LastBlogs.Count() == 0)
+            {
+                <h2 class="suggested-topics-text" style="display:none">Son kaydedilenler</h2>
+            }
+            else
+            {
+                <h2 class="suggested-topics-text">Son kaydedilenler</h2>
+
+                    @foreach (var item in Model.LastBlogs)
+                    {
+                        <div class="col-md-10 last-column">
+                            <div class="last-blog-user-avatar-box">
+                                <div class="last-blog-image">
+                                    <img src="~/@item.Avatar" class="last-blog-user-avatar" />
+                                </div>
+                                <div class="last-blogs-user-info">
+                                    <h5 class="last-first">@item.FirstName</h5>
+                                    <h5 class="last-last">@item.LastName</h5>
+                                </div>
+                            </div>
+                            <div class="blg-content-group">
+                                <div class="last-blog-user">
+                                    <h4 class="blgtitle">@(item.BlogTitle.Length > 30 ? item.BlogTitle.Substring(0, 30) + "..." : item.BlogTitle)</h4>
+                                </div>
+                                <span class="blg-content">
+                                    @Html.Raw(item.BlogContent.Length > 200 ? item.BlogContent.Substring(0, 200) + "..." : item.BlogContent)
+                                </span>
+                                <h5 class="last-blog-date">@item.BlogDate.ToString("ddd, MMM d, yyyy")</h5>
+                            </div>
+                        </div>
+                    }
+            }
+        </div>
+
+
+        </aside>
+    </div>
+</div>
+
+
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@functions{
+    public string GetAntiXsrfRequestToken()
+    {
+        return Xsrf.GetAndStoreTokens(Context).RequestToken;
+    }
+}
+
+
+<script>
+    $('.comment-modal').on('click', function (e) {
+        var passedID = $(this).data('id');
+
+        console.log(passedID);
+        $(".modal-body .data").val(passedID);
+        var data = $(".data").val();
+        console.log(data);
+    });
+</script>
+
+<script>
+    $(function () {
+
+        $(".container").on("click", ".data", function () {
+            var id = $(".data").val();
+            console.log(id);
+
+
+            let data = {
+                Text: $("#comment-field").val(),
+
+            };
+            $.ajax({
+                url: "/users/users/sendmessagetousers/" +id,
+                data: data,
+                dataType: 'json',
+                type: "POST",
+                headers: {"RequestVerificationToken": '@GetAntiXsrfRequestToken()'},
+                success: function (data) {
+                    Swal.fire('Mesajınız kullanıcıya başarıyla gönderildi.')
+
+                }
+            })
+        })
+
+
+    })
+</script>
+
+<script>
+    $(function () {
+        var flag = false;
+
+        $(".container").on("click", "#LikeButton", function () {
+            var btn = $(this)
+            var id = btn.data("id")
+            flag = !flag;
+            event.stopPropagation();
+
+            $.ajax({
+                type: "GET",
+                url: "/Users/Users/like/" + id,
+                success: function (data) {
+                    var like = parseInt($("#span").text());
+                    if (flag) {
+                        like += 1;
+                    }
+                    else {
+                        like -= 1;
+                    }
+                    $("#span").text(like);
+                    console.log(like);
+                    //$("#span").html(data);
+                    btn.attr('id', 'UnLike')
+                }
+            })
+        })
+    })
+</script>
+
+<script>
+    $(function () {
+        $(".container").on("click", "#UnLike", function () {
+            var btn = $(this)
+            var id = btn.data("id")
+
+            $.ajax({
+                type: "GET",
+                url: "/Users/Users/unlike/" + id,
+                success: function (data) {
+                    btn.attr('id', 'LikeButton')
+                }
+            })
+        })
+    })
+</script>
+<script>
+    $(function () {
+
+        $(".container").on("click", "#save-button", function () {
+            var btn = $(this)
+            var id = btn.data("id")
+
+
+            $.ajax({
+                type: "GET",
+                url: "/Users/Users/savelist/" + id,
+                success: function (data) {
+                   
+
+                    $(btn).find('.bookmark-icon').remove();
+                    btn.addClass('fa-solid fa-bookmark bookmark');
+                     btn.attr('id', 'remove-list')
+                }
+            })
+        })
+    })
+</script>
+
+<script>
+    $(function () {
+        //var flag = false;
+
+        $(".container").on("click", "#remove-list", function () {
+            var btn = $(this)
+            var id = btn.data("id")
+
+
+            $.ajax({
+                type: "GET",
+                url: "/Users/Users/removelist/" + id,
+                success: function (data) {
+                    $(btn).find('fa-solid fa-bookmark').remove();
+                    btn.addClass('.bookmark-icon');
+                    btn.attr('id', 'save-button');
+                }
+            })
+        })
+    })
+</script>
+
+<script type="text/javascript">
+
+        $(".container").on("click", "#follow", function () {
+            var btn = $(this)
+            var id = btn.data("id")
+
+            var t = $("input[name='__RequestVerificationToken']").val()
+
+                $.ajax({
+                    type: "GET",
+                    headers:
+                    {
+                        "RequestVerificationToken": '@GetAntiXsrfRequestToken()'
+                    },
+                    url: "/Users/Users/UserId/" + id,
+                    success: function (data) {
+                        btn.text('Takip ediliyor')
+                        btn.attr('id', 'followed')
+                    },
+                });
+        });
+
+</script>
+
+<script type="text/javascript">
+        $(function () {
+            $(".container").on("click", "#followed", function () {
+                var btn = $(this)
+                var id = btn.data("id")
+
+                $.ajax({
+                    type: "GET",
+                    headers:
+                    {
+                        "RequestVerificationToken": '@GetAntiXsrfRequestToken()'
+                    },
+                    url: "/Users/Users/IsFollowing/" + id,
+                    success: function (data) {
+                        btn.text('Takip et')
+                        btn.attr('id', 'follow')
+                    }
+                })
+            })
+        })
+</script>

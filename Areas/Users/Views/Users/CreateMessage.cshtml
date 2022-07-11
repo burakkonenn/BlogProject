@@ -1,0 +1,96 @@
+﻿@model BlogProject.Areas.Users.Model.ViewModel
+
+
+
+    @Html.AntiForgeryToken()
+
+
+    <div class="container">
+        <div id='main'>
+            <article>
+                <div class="col col-md-10 col-lg-9 col-xl-8 mx-auto my-auto">
+                    <div class="card my-5 msgcard">
+                        <div class="card-body">
+
+
+                        </div>
+                        <div class="card-footer border-0 bottom-rounded z-depth-0" style="background-color: #97E3C2">
+                            <div class="row">
+                                <div class="col col-md-10 col-lg-9 mx-auto">
+                                    <div class="row d-flex justify-content-center">
+                                        <div class="col-12 col-md-9 align-self-center my-0">
+                                            <div class="row d-flex align-self-center justify-content-center">
+                                                <div class="col-12 d-flex">
+                                                    <div class="form-group col-12 my-0 mx-0">
+                                                        <textarea rows="2" id="content" name="content" placeholder="what's up bro!" class="form-control textarea resize-ta"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-3 d-flex align-self-center justify-content-center justify-content-md-end my-0">
+                                            <div class="md-form my-1">
+                                                <button onClick="scrollDown()" type="button" class="btn btn-success">Send Message</button>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            <nav class="left-sidebar">
+                <div class="main-nav">
+                    <div class="col-md-6 form-group">
+                        <select class="form-control" id="UserList">
+                            @foreach (var user in Model.Users)
+                            {
+                                <option value="@user.Id">@user.UserName</option>
+                            }
+                        </select>
+                    </div>
+                    <div>
+
+                    </div>
+                </div>
+                @*<div class="dropdown NavDropdown">
+                <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
+                    <div class="user-avatar-box-leftsidebar">
+                        <img src="~/@Model.User.Avatar" class="user-avatar-leftsidebar" />
+                    </div>
+                    <div class="user-box-button">
+                        <h5 class="userName">@Model.User.FirstName</h5>
+                        <h5 class="email">@Model.User.UserName</h5>
+                    </div>
+                    <div class="user-dot">
+                        <h5 class="nokta">...</h5>
+                    </div>
+
+                </button>
+                <div class="dropdown-menu LogoutDropdown" aria-labelledby="dropdownMenuButton">
+                    <div class="d-flex">
+                        <div class="user-avatar-box-leftsidebar">
+                            <img src="~/@Model.User.Avatar" class="user-avatar-leftsidebar" />
+                        </div>
+                        <div class="user-box-button1">
+                            <h5 class="userName">@Model.User.FirstName</h5>
+                            <h5 class="email">@Model.User.UserName</h5>
+                        </div>
+                        <div class="user-dot1">
+                            <h5 class="nokta"><i class="fa-solid fa-thumbs-up"></i></h5>
+                        </div>
+                    </div>
+                    <div class="logout-user">
+                        <a class="logout-username text-secondary">@Model.User.UserName</a>
+                        <a href="#">hesabından çıkış yap</a>
+                    </div>
+                </div>
+            </div>*@
+            </nav>
+
+
+        </div>
+    </div>
+
+

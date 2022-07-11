@@ -1,0 +1,142 @@
+﻿
+@{
+    ViewData["Title"] = "Set";
+}
+
+
+@model BlogProject.Areas.Users.Model.BlogViewModel
+<script src="~/lib/jquery/jquery.min.js"></script>
+
+
+<form asp-area="Users" asp-controller="Users" asp-action="Set" method="post" enctype="multipart/form-data">
+
+    <div class="container">
+        <div id='main'>
+
+
+            <article>
+                <div class="row rrr" style="margin:0">
+                    <div class="col-md-12 sss">
+                        <textarea id="editor1" style="width:100%" asp-for="@Model.Content" class="ckeditor"></textarea>
+                        <span asp-validation-for="@Model.Content" class="text-danger validation"></span>
+                    </div>
+                </div>
+            </article>
+
+
+            <aside>
+                <div class="row d-flex justify-content-center PublishRow">
+                    <div class="col-md-11">
+                        <div class="d-flex mt-2">
+                            <div class="user-avatar-box">
+                                <img src="~/@Model.User.Avatar" class="user-avatar" />
+                            </div>
+                            <div class="firstname-username">
+                                <a asp-area="Users" asp-controller="Users" asp-action="UserProfile" asp-route-firstname="@Model.User.FirstName" class=""><h5 class="SetFirstname">@Model.User.FirstName</h5></a>
+                                <h5 class="SetUserName">@Model.User.UserName</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row d-flex justify-content-center TagRow" style="margin:0">
+                    <div class="col-md-11 justify-content-center">
+
+
+                        <input class="form-control userİnput rounded-0 mb-4" placeholder="Hikayeniz için bir başlık ekleyin" asp-for="@Model.Title" />
+                        <span asp-validation-for="@Model.Title" class="text-danger validation"></span>
+
+                        <input class="form-control userİnput rounded-0 mb-4" placeholder="Hikayeniz için etiket ekleyin" asp-for="@Model.Tag" />
+                        <span asp-validation-for="@Model.Tag" class="text-danger validation"></span>
+
+                        <input class="form-control userİnput rounded-0" placeholder="Hikayeniz için bir açıklama ekleyin" asp-for="@Model.Description" />
+                        <span asp-validation-for="@Model.Description" class="text-danger validation"></span>
+
+                        @Html.HiddenFor(model => model.Date, new { @Value = DateTime.Now.ToString("dd-MM-yyyy") })
+                        <input type="hidden" name="Date" value="@DateTime.Now.ToLongDateString()" />
+
+                        <div class="col-ting">
+                            <div class="control-group file-upload" id="file-upload1">
+                                <div class="image-box text-center">
+                                    <p class="upload-text">Resim Yükle</p>
+                                    <img src="" class="displayImage" alt="">
+                                </div>
+                                <div class="controls" style="display: none;">
+                                    <input type="file" asp-for="@Model.BlgImage" id="upload-photo" accept="image/*" onchange="ImgPre(this)" />
+                                    <span asp-validation-for="@Model.BlgImage" class="text-danger validation"></span>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-success d-flex Publish"><h2>Yayınla</h2></button>
+
+                    </div>
+                </div>
+            </aside>
+
+            <nav class="left-sidebar">
+
+                <div class="dropdown-login">
+                    <button class="dropdown-toggle dropdown-btn" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
+                        <div class="user-avatar-box-leftsidebar">
+                            <img src="~/@Model.User.Avatar" class="user-avatar-leftsidebar" />
+                        </div>
+                    </button>
+                    <div class="dropdown-menu logout-dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <div class="logout-user">
+                            <div class="user-avatar-box-leftsidebar">
+                                <img src="~/@Model.User.Avatar" class="user-avatar-leftsidebar" />
+                            </div>
+                            <a class="logout-username">@Model.User.UserName</a>
+                            <a href="#">hesabından çıkış yap</a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+        </div>
+    </div>
+
+</form>
+
+<script>
+    function ImgPre(input) {
+        if (input.files[0]) {
+            var uploadimg = new FileReader();
+            uploadimg.onload = function (displayimg) {
+                $("#ImgPreview-blog").attr('src', displayimg.target.result);
+            }
+            uploadimg.readAsDataURL(input.files[0]);
+            $("#ImgPreview-blog").show();
+        }
+    }
+</script>
+
+
+<script>
+    $(".image-box").click(function (event) {
+        var previewImg = $(this).children(".displayImage");
+
+        $(this)
+            .siblings()
+            .children("input")
+            .trigger("click");
+
+        $(this)
+            .siblings()
+            .children("input")
+            .change(function () {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    var urll = e.target.result;
+                    $(previewImg).attr("src", urll);
+                    previewImg.parent().css("background", "transparent");
+                    previewImg.show();
+                    previewImg.siblings("p").hide();
+                };
+                reader.readAsDataURL(this.files[0]);
+            });
+    });
+
+</script>

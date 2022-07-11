@@ -1,0 +1,261 @@
+﻿
+@*@model BlogProject.Areas.Users.Model.ViewModel
+
+
+
+
+@Html.AntiForgeryToken()
+
+<div class="container">
+    <div id='main'>
+        <article>
+            <div class="FollowUserInfo" style="margin:0">
+                <a asp-area="Users" asp-controller="Users" asp-action="UserProfile" asp-route-firstname="@Model.User.FirstName" class="Follow"><h2>@Model.User.FirstName</h2></a>
+                <h3 class="Follow-username">@Model.User.UserName</h3>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="tsum-tabs">
+                        <input id="tab1" type="radio" name="tabs" checked>
+                        <label for="tab1">Takipçiler</label>
+
+                        <input id="tab2" type="radio" name="tabs">
+                        <label for="tab2">Takip edilenler</label>
+
+                        <section id="content1">
+                            <div class="row rows" style="margin:0;">
+                                @foreach (var item in Model.Follower)
+                                {
+
+                                    <div class="col-md-12 borders">
+                                        <div class="d-flex align-items-center">
+
+                                            <div class="user-avatar-box">
+                                                <img src="~/@item.Followee.Avatar" class="user-avatar" />
+                                            </div>
+                                            <div class="followed-users">
+                                                <a asp-area="Users" asp-controller="Users" asp-action="UserProfile" asp-route-firstname="@item.Followee.FirstName" class="Follow">
+                                                    <h2> @item.Followee.FirstName</h2>
+                                                </a>
+                                                <h3 class="Follow-username">@item.Followee.UserName</h3>
+                                            </div>
+                                            <div class="followClass">
+                                                <a href="#" class="FollowButton"></a>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                }
+                            </div>
+                        </section>
+
+                        <section id="content2">
+                            <div class="row rows" style="margin:0;">
+                                @foreach (var item in Model.Followed)
+                                {
+
+                                    <div class="col-md-12 borders">
+                                        <div class="d-flex align-items-center">
+
+                                            <div class="user-avatar-box">
+                                                <img src="~/@item.Follower.Avatar" class="user-avatar" />
+                                            </div>
+                                            <div class="followed-users">
+                                                <a asp-area="Users" asp-controller="Users" asp-action="UserProfile" asp-route-firstname="@item.Follower.FirstName" class="Follow">
+                                                    <h2>@item.Follower.FirstName</h2>
+                                                </a>
+                                                <h3 class="Follow-username">@item.Follower.UserName</h3>
+                                            </div>
+                                            <div class="followClass">
+                                                <a href="#" class="FollowButton"></a>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                }
+                            </div>
+                        </section>
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        </article>
+        <nav class="LeftSidebar">
+            <div class="main-nav">
+                <ul>
+                    <li>
+                        <a href="/"> <img style="width:15px;" src="~/home-svgrepo-com (2).svg" /></a>
+                    </li>
+                    <li>
+                        <a asp-area="Users" asp-controller="Users" asp-action="Explore"><img style="width: 15px;" src="~/shine-hashtag-svgrepo-com.svg" /></a>
+                    </li>
+                    <li>
+                        <a asp-area="Users" asp-controller="Users" asp-action="Notifications"><img style="width: 15px;" src="~/notification-svgrepo-com.svg" /></a>
+                    </li>
+                    <li>
+                        <a href=""><img style="width: 15px;" src="~/list-svgrepo-com.svg" /></a>
+                    </li>
+                    <li>
+                        <a asp-area="Users" asp-controller="Users" asp-action="Messages">
+                            <img src="~/message-svgrepo-com.svg" style="width:15px;" />
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-area="Users" asp-controller="Users" asp-action="Set"><img style="width: 15px;" src="~/edit-svgrepo-com.svg" /></a>
+                    </li>
+                    <li>
+                        <a asp-area="Users" asp-controller="Users" asp-action="Home"><i class="fa-solid fa-user"></i></a>
+
+                    </li>
+                </ul>
+            </div>
+            <div class="dropdown NavDropdown">
+                <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
+                    <div class="user-avatar-box-leftsidebar">
+                        <img src="~/@Model.User.Avatar" class="user-avatar-leftsidebar" />
+                    </div>
+                    <div class="user-box-button">
+                        <h5 class="userName">@Model.User.FirstName</h5>
+                        <h5 class="email">@Model.User.UserName</h5>
+                    </div>
+                    <div class="user-dot">
+                        <h5 class="nokta">...</h5>
+                    </div>
+
+                </button>
+                <div class="dropdown-menu LogoutDropdown" aria-labelledby="dropdownMenuButton">
+                    <div class="d-flex">
+                        <div class="user-avatar-box-leftsidebar">
+                            <img src="~/@Model.User.Avatar" class="user-avatar-leftsidebar" />
+                        </div>
+                        <div class="user-box-button1">
+                            <h5 class="userName">@Model.User.FirstName</h5>
+                            <h5 class="email">@Model.User.UserName</h5>
+                        </div>
+                        <div class="user-dot1">
+                            <h5 class="nokta"><i class="fa-solid fa-thumbs-up"></i></h5>
+                        </div>
+                    </div>
+                    <div class="logout-user">
+                        <a class="logout-username text-secondary">@Model.User.UserName</a>
+                        <a href="#">hesabından çıkış yap</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <aside>
+            <div class="row suggestedTopics">
+                <h2 class="suggestedTopicsText">Önerilen konular</h2>
+                <div class="col-md-12 d-flex flex-wrap TagColumn">
+                    @foreach (var item in Model.Category)
+                    {
+                        <a class="btn btn-light flex-wrap TagButton"><span>@item.Name</span></a>
+
+                    }
+                </div>
+            </div>
+
+            <div class="row FollowRow">
+                <h2 class="FollowText text-center">Takip Edebileceğin Kişiler</h2>
+                <div class="col-md-12 ">
+                    <div class="d-flex flex-column follow-col">
+                        @foreach (var item in Model.Following)
+                        {
+                            <div class="d-flex FollowGroup">
+                                <div class="user-avatar-box">
+                                    <img src="~/@item.Avatar" class="user-avatar" />
+                                </div>
+                                <div class="firstname-username">
+                                    <a asp-area="Users" asp-controller="Users" asp-action="UserProfile" asp-route-firstname="@item.FirstName" class="Follow"><h2>@item.FirstName</h2></a>
+                                    <h3 class="Follow-username">@item.UserName</h3>
+                                </div>
+                                <button id="follow" data-id="@item.Id" class="btn btn-dark FollowButton">Takip et</button>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+</div>
+
+
+
+<script>
+    $(document).ready(function () {
+        var firstName = $('.firstName').text();
+        var lastName = $('#lastName').text();
+        var intials = $('#firstName').text().charAt(0) + $('#lastName').text().charAt(0);
+        var profileImage = $('#profileImage').text(intials);
+    });
+
+    //$('.FollowButton').click(function () {
+    //    $(this).attr("value", "takip ediliyor");
+    //    $(this).css({ width: '100px' });
+
+    //});
+</script>
+
+
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@functions{
+    public string GetAntiXsrfRequestToken()
+    {
+        return Xsrf.GetAndStoreTokens(Context).RequestToken;
+    }
+}
+
+<script type="text/javascript">
+
+    $(".FollowGroup").on("click", "#follow", function () {
+        var btn = $(this)
+        var id = btn.data("id")
+
+        var t = $("input[name='__RequestVerificationToken']").val()
+
+            $.ajax({
+                type: "GET",
+                headers:
+                {
+                    "RequestVerificationToken": '@GetAntiXsrfRequestToken()'
+                },
+                url: "/Users/Users/UserId/" + id,
+                success: function (data) {
+                    btn.text('Takip ediliyor')
+                    btn.attr('id', 'followed')
+                },
+            });
+    });
+
+</script>
+
+<script type="text/javascript">
+    $(function () {
+        $(".FollowGroup").on("click", "#followed", function () {
+            var btn = $(this)
+            var id = btn.data("id")
+
+            $.ajax({
+                type: "GET",
+                headers:
+                {
+                    "RequestVerificationToken": '@GetAntiXsrfRequestToken()'
+                },
+                url: "/Users/Users/IsFollowing/" + id,
+                success: function (data) {
+                    btn.text('Takip et')
+                    btn.attr('id', 'follow')
+                }
+            })
+        })
+    })
+</script>*@
+
+
+
